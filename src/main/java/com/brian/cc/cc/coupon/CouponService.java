@@ -9,6 +9,21 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 用户请求（抢券）
+ *    ↓
+ * 接口层（API 网关 / 控制器）
+ *    ↓
+ * Redis 券池（Set）执行 spop 弹出券码
+ *    ↓
+ * 校验是否已抢（Set 判重）
+ *    ↓
+ * Lua 脚本原子执行：抢券 + 标记用户
+ *    ↓
+ * 返回抢到的券码
+ *    ↓
+ * 写入数据库（异步落库 / MQ）
+ */
 // 1. 优惠券服务类
 @Service
 public class CouponService {
