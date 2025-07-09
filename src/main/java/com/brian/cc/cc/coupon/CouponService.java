@@ -43,7 +43,17 @@ public class CouponService {
         return result; // 返回抢到的优惠券ID，或 null
     }
 
+    /**
+     * 用户是否已抢过？
+     *     ├── 是 → return nil
+     *     └── 否 →
+     *         券池还有券吗？
+     *            ├── 是 → 抢券 → 标记用户 → 记录绑定关系 → return 券码
+     *            └── 否 → return nil
+     * @return
+     */
     private String loadLuaScript() {
+
         return """
             if redis.call('sismember', KEYS[2], ARGV[1]) == 1 then
               return nil
